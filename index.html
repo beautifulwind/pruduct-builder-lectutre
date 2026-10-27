@@ -1,11 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+        // 깜빡임 방지: 렌더링 전에 저장된 테마 적용
+        (function () {
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) {}
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+        })();
+    </script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --button-bg: #f0f0f0;
+            --button-text: #1a1a1a;
+            --button-border: #d0d0d0;
+        }
+        :root[data-theme="dark"] {
+            --bg: #121212;
+            --text: #f0f0f0;
+            --button-bg: #2a2a2a;
+            --button-text: #f0f0f0;
+            --button-border: #444444;
+        }
+        body {
+            margin: 0;
+            padding: 16px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            transition: background 0.2s, color 0.2s;
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            padding: 8px 14px;
+            border: 1px solid var(--button-border);
+            border-radius: 8px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle" type="button"></button>
     <h1>안녕하세요</h1>
+
+    <script>
+        var toggle = document.getElementById('themeToggle');
+
+        function render() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            toggle.textContent = isDark ? '☀️ 라이트 모드' : '🌙 다크 모드';
+            toggle.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        }
+
+        toggle.addEventListener('click', function () {
+            var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+            render();
+        });
+
+        render();
+    </script>
 </body>
 </html>
