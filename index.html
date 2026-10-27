@@ -93,6 +93,12 @@
             margin-top: 12px;
             font-size: 14px;
         }
+        .comments {
+            max-width: 720px;
+            margin: 80px auto 0;
+            padding-top: 32px;
+            border-top: 1px solid var(--button-border);
+        }
     </style>
 </head>
 <body>
@@ -157,9 +163,34 @@
             document.documentElement.setAttribute('data-theme', next);
             try { localStorage.setItem('theme', next); } catch (e) {}
             render();
+            // Disqus는 로드 시점의 배경색으로 테마를 정하므로, 전환이 끝난 뒤 다시 불러온다
+            if (window.DISQUS) {
+                setTimeout(function () {
+                    DISQUS.reset({ reload: true, config: disqus_config });
+                }, 250);
+            }
         });
 
         render();
+    </script>
+
+    <section class="comments">
+        <h2>댓글</h2>
+        <div id="disqus_thread"></div>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+
+    <script>
+        var disqus_config = function () {
+            this.page.url = location.origin + location.pathname;
+            this.page.identifier = location.pathname;
+        };
+        (function () {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://productbuilder-jjmayjcvqs.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
     </script>
 </body>
 </html>
