@@ -48,11 +48,100 @@
             font-size: 14px;
             cursor: pointer;
         }
+        .contact {
+            max-width: 480px;
+            margin: 40px auto 0;
+        }
+        .contact label {
+            display: block;
+            margin: 16px 0 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .contact input,
+        .contact textarea {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--button-border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font: inherit;
+        }
+        .contact textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .contact button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--button-border);
+            border-radius: 8px;
+            background: var(--text);
+            color: var(--bg);
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .contact button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        .form-status {
+            margin-top: 12px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" type="button"></button>
     <h1>안녕하세요</h1>
+
+    <section class="contact">
+        <h2>제휴 문의</h2>
+        <form id="contactForm" action="https://formspree.io/f/xyeewbjn" method="POST">
+            <label for="name">이름 / 회사명</label>
+            <input id="name" name="name" type="text" required>
+
+            <label for="email">이메일</label>
+            <input id="email" name="email" type="email" required>
+
+            <label for="message">문의 내용</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <input type="hidden" name="_subject" value="새 제휴 문의">
+            <button type="submit">문의 보내기</button>
+            <p class="form-status" id="formStatus" role="status"></p>
+        </form>
+    </section>
+
+    <script>
+        var form = document.getElementById('contactForm');
+        var formStatus = document.getElementById('formStatus');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var submit = form.querySelector('button[type="submit"]');
+            submit.disabled = true;
+            formStatus.textContent = '보내는 중...';
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            }).then(function (res) {
+                if (!res.ok) throw new Error();
+                form.reset();
+                formStatus.textContent = '문의가 접수되었습니다. 빠르게 연락드리겠습니다.';
+            }).catch(function () {
+                formStatus.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+            }).finally(function () {
+                submit.disabled = false;
+            });
+        });
+    </script>
 
     <script>
         var toggle = document.getElementById('themeToggle');
