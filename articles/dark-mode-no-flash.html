@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>깜빡임 없는 다크 모드 구현하기 | 프로덕트 빌더 노트</title>
+    <meta name="description" content="CSS 변수와 head 안의 짧은 인라인 스크립트로 새로고침해도 번쩍이지 않는 다크 모드를 만들고, 외부 위젯까지 테마를 맞추는 방법을 설명합니다.">
+    <link rel="canonical" href="https://beautifulwind.github.io/pruduct-builder-lectutre/articles/dark-mode-no-flash.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="프로덕트 빌더 노트">
+    <meta property="og:title" content="깜빡임 없는 다크 모드 구현하기">
+    <meta property="og:description" content="CSS 변수와 head 안의 짧은 인라인 스크립트로 새로고침해도 번쩍이지 않는 다크 모드를 만들고, 외부 위젯까지 테마를 맞추는 방법을 설명합니다.">
+    <meta property="og:url" content="https://beautifulwind.github.io/pruduct-builder-lectutre/articles/dark-mode-no-flash.html">
+    <meta property="og:locale" content="ko_KR">
+    <meta name="google-adsense-account" content="ca-pub-5980165987555852">
+    <script>
+        // 깜빡임 방지: 렌더링 전에 저장된 테마 적용
+        (function () {
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) {}
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5980165987555852"
+         crossorigin="anonymous"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "깜빡임 없는 다크 모드 구현하기", "description": "CSS 변수와 head 안의 짧은 인라인 스크립트로 새로고침해도 번쩍이지 않는 다크 모드를 만들고, 외부 위젯까지 테마를 맞추는 방법을 설명합니다.", "datePublished": "2026-10-29", "dateModified": "2026-10-29", "inLanguage": "ko", "author": {"@type": "Person", "name": "beautifulwind", "url": "https://github.com/beautifulwind"}, "mainEntityOfPage": "https://beautifulwind.github.io/pruduct-builder-lectutre/articles/dark-mode-no-flash.html"}</script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="../index.html">프로덕트 빌더 노트</a>
+            <nav class="site-nav" aria-label="주 메뉴">
+            <a href="../index.html">홈</a>
+            <a href="../about.html">소개</a>
+            <a href="../contact.html">문의</a>
+            </nav>
+            <button class="theme-toggle" id="themeToggle" type="button"></button>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <article>
+            <p class="breadcrumb"><a href="../index.html">홈</a> › 프런트엔드</p>
+            <h1>깜빡임 없는 다크 모드 구현하기</h1>
+            <p class="meta">글: beautifulwind · <time datetime="2026-10-29">2026년 10월 29일</time> · 프런트엔드</p>
+
+        <p class="lead">다크 모드를 구현해 놓고 새로고침할 때마다 화면이 하얗게 번쩍였다가 어두워지는 현상을 겪었다면, 테마를 적용하는 <strong>시점</strong>이 문제입니다. 이 글에서는 CSS 변수와 아주 짧은 인라인 스크립트로 깜빡임 없는 다크 모드를 만드는 방법을 설명합니다.</p>
+
+        <nav class="toc" aria-label="목차">
+            <strong>목차</strong>
+            <ol>
+                <li><a href="#why">왜 깜빡일까</a></li>
+                <li><a href="#vars">CSS 변수로 색상 정리하기</a></li>
+                <li><a href="#inline">렌더링 전에 테마 정하기</a></li>
+                <li><a href="#toggle">전환 버튼 만들기</a></li>
+                <li><a href="#embed">외부 위젯과 함께 쓸 때</a></li>
+                <li><a href="#check">점검 목록</a></li>
+            </ol>
+        </nav>
+
+        <h2 id="why">왜 깜빡일까</h2>
+        <p>브라우저는 HTML을 위에서부터 읽으며 화면을 그립니다. 테마를 정하는 스크립트를 <code>&lt;body&gt;</code> 끝이나 <code>DOMContentLoaded</code> 이벤트 안에 두면, 그 코드가 실행되기 전까지는 기본 테마(대개 밝은 테마)로 한 번 그려진 뒤에 어두운 테마로 다시 칠해집니다. 이 짧은 순간이 눈에는 "번쩍임"으로 보입니다. 해결책은 간단합니다. <strong>첫 화면을 그리기 전에</strong> 테마를 결정하면 됩니다.</p>
+
+        <h2 id="vars">CSS 변수로 색상 정리하기</h2>
+        <p>먼저 색상을 CSS 사용자 정의 속성(변수)으로 모읍니다. 요소마다 색을 직접 쓰지 않고 변수를 참조하게 해 두면, 테마 전환은 <code>&lt;html&gt;</code>의 속성 하나를 바꾸는 일로 끝납니다.</p>
+        <pre><code>:root {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --border: #dcdcd8;
+        }
+        :root[data-theme="dark"] {
+            --bg: #121212;
+            --text: #f0f0f0;
+            --border: #3a3a3a;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }</code></pre>
+        <p>다크 모드 색상은 순수한 검정(<code>#000</code>)과 순수한 흰색(<code>#fff</code>) 조합보다 약간 띄운 값을 쓰는 편이 눈이 덜 피로합니다. 또한 밝은 테마와 어두운 테마 모두에서 본문 글자와 배경의 명암비가 WCAG 권장 기준인 4.5:1 이상인지 확인해 두세요.</p>
+
+        <h2 id="inline">렌더링 전에 테마 정하기</h2>
+        <p>다음 스크립트를 <code>&lt;head&gt;</code> 안, 스타일시트보다 앞쪽에 <strong>인라인으로</strong> 넣습니다. 외부 파일로 분리하면 파일을 내려받는 동안 렌더링이 진행될 수 있으므로 이 몇 줄만큼은 인라인이어야 합니다.</p>
+        <pre><code>&lt;script&gt;
+            (function () {
+                var saved = null;
+                try { saved = localStorage.getItem('theme'); } catch (e) {}
+                var prefersDark = window.matchMedia &amp;&amp;
+                    window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute(
+                    'data-theme', saved || (prefersDark ? 'dark' : 'light'));
+            })();
+        &lt;/script&gt;</code></pre>
+        <p>이 코드는 세 가지를 처리합니다.</p>
+        <ul>
+            <li>사용자가 이전에 직접 고른 테마가 있으면 그것을 우선합니다.</li>
+            <li>없으면 운영체제의 설정(<code>prefers-color-scheme</code>)을 따릅니다.</li>
+            <li><code>localStorage</code> 접근은 <code>try</code>로 감쌉니다. 사파리의 일부 개인 정보 보호 모드나 쿠키 차단 설정에서는 접근 자체가 예외를 던지기 때문에, 감싸지 않으면 스크립트 전체가 멈춥니다.</li>
+        </ul>
+
+        <h2 id="toggle">전환 버튼 만들기</h2>
+        <p>버튼은 현재 테마를 읽어 반대로 바꾸고, 선택을 저장하기만 하면 됩니다.</p>
+        <pre><code>toggle.addEventListener('click', function () {
+            var root = document.documentElement;
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+        });</code></pre>
+        <p>버튼에는 현재 상태가 아니라 <strong>눌렀을 때 일어날 일</strong>을 알려 주는 <code>aria-label</code>(예: "다크 모드로 전환")을 붙이면 화면 낭독기 사용자도 의미를 바로 이해할 수 있습니다. 아이콘만 있는 버튼이라면 이 레이블은 사실상 필수입니다.</p>
+
+        <h2 id="embed">외부 위젯과 함께 쓸 때</h2>
+        <p>댓글 위젯처럼 <code>iframe</code>으로 삽입되는 외부 콘텐츠는 내 CSS 변수가 적용되지 않습니다. 예를 들어 Disqus는 불러오는 시점에 부모 페이지의 배경색을 읽어 밝은 테마와 어두운 테마 중 하나를 고릅니다. 그래서 사용자가 테마를 바꾼 뒤에도 댓글 영역만 이전 색으로 남는 일이 생깁니다.</p>
+        <p>이럴 때는 배경색 전환 애니메이션이 끝난 뒤 위젯을 다시 불러오면 됩니다. Disqus라면 <code>DISQUS.reset({ reload: true, config: disqus_config })</code>를 <code>setTimeout</code>으로 약간 늦춰 호출하는 방식이 실용적입니다. 전환 애니메이션이 0.2초라면 그보다 조금 긴 0.25초 정도가 적당합니다.</p>
+
+        <h2 id="check">점검 목록</h2>
+        <ul>
+            <li>테마 결정 스크립트가 <code>&lt;head&gt;</code> 안에 인라인으로 있는가</li>
+            <li><code>body</code>의 배경색을 명시했는가 (지정하지 않으면 브라우저 기본값인 흰색이 비칠 수 있음)</li>
+            <li>개인 정보 보호 모드에서도 오류 없이 동작하는가</li>
+            <li>두 테마 모두에서 링크, 테두리, 입력창의 명암비가 충분한가</li>
+            <li>이미지나 외부 위젯이 어두운 배경에서 어색하지 않은가</li>
+        </ul>
+        <p>이 사이트의 다크 모드 역시 위 방식 그대로 구현되어 있습니다. 오른쪽 위의 버튼을 눌러 확인해 보세요.</p>
+
+            <aside class="author-box">
+                <strong>글쓴이 beautifulwind</strong><br>
+                이 사이트를 직접 만들고 운영하며 겪은 문제와 해결 방법을 기록합니다. 내용에 오류가 있다면 아래 댓글이나 <a href="../contact.html">문의 페이지</a>로 알려 주세요.
+            </aside>
+
+            <nav class="related" aria-label="관련 글">
+                <strong>함께 읽으면 좋은 글</strong>
+                <ul>
+                    <li><a href="web-accessibility-checklist.html">작은 사이트를 위한 웹 접근성 점검 목록</a></li>
+                    <li><a href="page-speed-basics.html">정적 사이트 로딩 속도 개선 기본</a></li>
+                </ul>
+            </nav>
+        </article>
+
+        <section class="comments" aria-label="댓글">
+            <h2>댓글</h2>
+            <div id="disqus_thread"></div>
+            <noscript>댓글을 보려면 JavaScript를 켜 주세요. <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <nav aria-label="사이트 정보">
+            <a href="../about.html">소개</a>
+            <a href="../contact.html">문의</a>
+            <a href="../privacy.html">개인정보처리방침</a>
+            <a href="../terms.html">이용약관</a>
+            </nav>
+            <p>&copy; 2026 프로덕트 빌더 노트. 운영: beautifulwind</p>
+        </div>
+    </footer>
+
+    <script src="../assets/main.js"></script>
+</body>
+</html>

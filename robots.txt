@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beautifulwind.github.io/pruduct-builder-lectutre/sitemap.xml

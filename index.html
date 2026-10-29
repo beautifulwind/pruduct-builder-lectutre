@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>프로덕트 빌더 노트</title>
+    <meta name="description" content="정적 웹사이트 제작, GitHub Pages 배포, 다크 모드, 서버 없는 문의 폼, 웹 접근성, 페이지 속도, 검색 최적화까지 실제 제작 경험을 바탕으로 정리한 실무 가이드입니다.">
+    <link rel="canonical" href="https://beautifulwind.github.io/pruduct-builder-lectutre/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="프로덕트 빌더 노트">
+    <meta property="og:title" content="프로덕트 빌더 노트">
+    <meta property="og:description" content="정적 웹사이트 제작, GitHub Pages 배포, 다크 모드, 서버 없는 문의 폼, 웹 접근성, 페이지 속도, 검색 최적화까지 실제 제작 경험을 바탕으로 정리한 실무 가이드입니다.">
+    <meta property="og:url" content="https://beautifulwind.github.io/pruduct-builder-lectutre/">
+    <meta property="og:locale" content="ko_KR">
     <meta name="google-adsense-account" content="ca-pub-5980165987555852">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5980165987555852"
-         crossorigin="anonymous"></script>
     <script>
         // 깜빡임 방지: 렌더링 전에 저장된 테마 적용
         (function () {
@@ -16,184 +22,88 @@
             document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
         })();
     </script>
-    <style>
-        :root {
-            --bg: #ffffff;
-            --text: #1a1a1a;
-            --button-bg: #f0f0f0;
-            --button-text: #1a1a1a;
-            --button-border: #d0d0d0;
-        }
-        :root[data-theme="dark"] {
-            --bg: #121212;
-            --text: #f0f0f0;
-            --button-bg: #2a2a2a;
-            --button-text: #f0f0f0;
-            --button-border: #444444;
-        }
-        body {
-            margin: 0;
-            padding: 16px;
-            background: var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, sans-serif;
-            transition: background 0.2s, color 0.2s;
-        }
-        .theme-toggle {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            padding: 8px 14px;
-            border: 1px solid var(--button-border);
-            border-radius: 8px;
-            background: var(--button-bg);
-            color: var(--button-text);
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .contact {
-            max-width: 480px;
-            margin: 40px auto 0;
-        }
-        .contact label {
-            display: block;
-            margin: 16px 0 6px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .contact input,
-        .contact textarea {
-            box-sizing: border-box;
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--button-border);
-            border-radius: 8px;
-            background: var(--bg);
-            color: var(--text);
-            font: inherit;
-        }
-        .contact textarea {
-            min-height: 140px;
-            resize: vertical;
-        }
-        .contact button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--button-border);
-            border-radius: 8px;
-            background: var(--text);
-            color: var(--bg);
-            font: inherit;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .contact button:disabled {
-            opacity: 0.6;
-            cursor: default;
-        }
-        .form-status {
-            margin-top: 12px;
-            font-size: 14px;
-        }
-        .comments {
-            max-width: 720px;
-            margin: 80px auto 0;
-            padding-top: 32px;
-            border-top: 1px solid var(--button-border);
-        }
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5980165987555852"
+         crossorigin="anonymous"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "프로덕트 빌더 노트", "url": "https://beautifulwind.github.io/pruduct-builder-lectutre/", "inLanguage": "ko"}</script>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle" type="button"></button>
-    <h1>안녕하세요</h1>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="index.html">프로덕트 빌더 노트</a>
+            <nav class="site-nav" aria-label="주 메뉴">
+            <a href="index.html" aria-current="page">홈</a>
+            <a href="about.html">소개</a>
+            <a href="contact.html">문의</a>
+            </nav>
+            <button class="theme-toggle" id="themeToggle" type="button"></button>
+        </div>
+    </header>
 
-    <section class="contact">
-        <h2>제휴 문의</h2>
-        <form id="contactForm" action="https://formspree.io/f/xyeewbjn" method="POST">
-            <label for="name">이름 / 회사명</label>
-            <input id="name" name="name" type="text" required>
+    <main class="wrap">
+        <h1>프로덕트 빌더 노트</h1>
+        <p class="lead">혼자서 웹사이트를 만들고 배포하고 운영하며 부딪힌 문제를 해결 과정과 함께 기록합니다. 정적 사이트 배포, 다크 모드, 서버 없는 문의 폼, 접근성, 속도, 검색 노출까지 실제로 이 사이트에 적용한 내용을 다룹니다.</p>
 
-            <label for="email">이메일</label>
-            <input id="email" name="email" type="email" required>
+        <h2>모든 글</h2>
+        <ul class="post-list">
+            <li>
+                <h3><a href="articles/github-pages-deploy.html">GitHub Pages로 정적 웹사이트 무료 배포하기</a></h3>
+                <p>저장소 준비부터 Pages 활성화, 프로젝트 사이트의 경로 문제, 사용자 지정 도메인 연결, 자주 겪는 오류까지 GitHub Pages 배포 과정을 정리합니다.</p>
+                <p class="meta">배포·호스팅 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/dark-mode-no-flash.html">깜빡임 없는 다크 모드 구현하기</a></h3>
+                <p>CSS 변수와 head 안의 짧은 인라인 스크립트로 새로고침해도 번쩍이지 않는 다크 모드를 만들고, 외부 위젯까지 테마를 맞추는 방법을 설명합니다.</p>
+                <p class="meta">프런트엔드 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/static-contact-form.html">서버 없이 정적 사이트에 문의 폼 만들기</a></h3>
+                <p>Formspree 같은 폼 백엔드로 정적 사이트에 이메일로 전달되는 문의 폼을 만들고, 중복 제출 방지와 스팸 차단, 개인정보 고지까지 챙기는 방법입니다.</p>
+                <p class="meta">기능 추가 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/ads-txt-guide.html">ads.txt 완벽 가이드: 의미, 작성법, 위치</a></h3>
+                <p>ads.txt가 막아 주는 도메인 위장 문제, 각 항목의 의미, 도메인 최상위에 두어야 하는 이유와 GitHub Pages에서 흔히 놓치는 위치 문제를 정리합니다.</p>
+                <p class="meta">사이트 운영 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/meta-tags-seo-basics.html">검색 노출을 위한 기본 메타 태그와 sitemap</a></h3>
+                <p>title, meta description, canonical, Open Graph, robots.txt, sitemap.xml까지 검색 결과에 페이지가 제대로 보이기 위해 먼저 챙길 기본을 설명합니다.</p>
+                <p class="meta">검색 최적화 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/web-accessibility-checklist.html">작은 사이트를 위한 웹 접근성 점검 목록</a></h3>
+                <p>문서 구조, 명암비, 이미지 대체 텍스트, 키보드 사용, 폼 레이블까지 작은 사이트에서 바로 적용할 수 있는 웹 접근성 항목과 확인 방법을 정리했습니다.</p>
+                <p class="meta">프런트엔드 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+            <li>
+                <h3><a href="articles/page-speed-basics.html">정적 사이트 로딩 속도 개선 기본</a></h3>
+                <p>Core Web Vitals 측정부터 이미지 최적화, 스크립트 로딩 순서, 웹 폰트, 레이아웃 흔들림, 외부 서비스 관리까지 효과가 큰 순서로 속도 개선 방법을 정리합니다.</p>
+                <p class="meta">성능 · <time datetime="2026-10-29">2026년 10월 29일</time></p>
+            </li>
+        </ul>
 
-            <label for="message">문의 내용</label>
-            <textarea id="message" name="message" required></textarea>
+        <h2>이런 분께 도움이 됩니다</h2>
+        <ul>
+            <li>HTML, CSS를 조금 알고 첫 개인 사이트를 배포해 보려는 분</li>
+            <li>사이트에 다크 모드, 문의 폼, 댓글 같은 기능을 서버 없이 붙이고 싶은 분</li>
+            <li>검색 노출과 광고 게재를 위해 사이트를 정비하려는 분</li>
+        </ul>
+        <p>사이트를 만든 이유와 글을 쓰는 원칙은 <a href="about.html">소개</a>에서 확인할 수 있습니다.</p>
+    </main>
 
-            <input type="hidden" name="_subject" value="새 제휴 문의">
-            <button type="submit">문의 보내기</button>
-            <p class="form-status" id="formStatus" role="status"></p>
-        </form>
-    </section>
+    <footer class="site-footer">
+        <div class="wrap">
+            <nav aria-label="사이트 정보">
+            <a href="about.html">소개</a>
+            <a href="contact.html">문의</a>
+            <a href="privacy.html">개인정보처리방침</a>
+            <a href="terms.html">이용약관</a>
+            </nav>
+            <p>&copy; 2026 프로덕트 빌더 노트. 운영: beautifulwind</p>
+        </div>
+    </footer>
 
-    <script>
-        var form = document.getElementById('contactForm');
-        var formStatus = document.getElementById('formStatus');
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var submit = form.querySelector('button[type="submit"]');
-            submit.disabled = true;
-            formStatus.textContent = '보내는 중...';
-
-            fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
-            }).then(function (res) {
-                if (!res.ok) throw new Error();
-                form.reset();
-                formStatus.textContent = '문의가 접수되었습니다. 빠르게 연락드리겠습니다.';
-            }).catch(function () {
-                formStatus.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-            }).finally(function () {
-                submit.disabled = false;
-            });
-        });
-    </script>
-
-    <script>
-        var toggle = document.getElementById('themeToggle');
-
-        function render() {
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            toggle.textContent = isDark ? '☀️ 라이트 모드' : '🌙 다크 모드';
-            toggle.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
-        }
-
-        toggle.addEventListener('click', function () {
-            var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            try { localStorage.setItem('theme', next); } catch (e) {}
-            render();
-            // Disqus는 로드 시점의 배경색으로 테마를 정하므로, 전환이 끝난 뒤 다시 불러온다
-            if (window.DISQUS) {
-                setTimeout(function () {
-                    DISQUS.reset({ reload: true, config: disqus_config });
-                }, 250);
-            }
-        });
-
-        render();
-    </script>
-
-    <section class="comments">
-        <h2>댓글</h2>
-        <div id="disqus_thread"></div>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </section>
-
-    <script>
-        var disqus_config = function () {
-            this.page.url = location.origin + location.pathname;
-            this.page.identifier = location.pathname;
-        };
-        (function () {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://productbuilder-jjmayjcvqs.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
-    </script>
+    <script src="assets/main.js"></script>
 </body>
 </html>

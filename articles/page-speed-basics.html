@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정적 사이트 로딩 속도 개선 기본 | 프로덕트 빌더 노트</title>
+    <meta name="description" content="Core Web Vitals 측정부터 이미지 최적화, 스크립트 로딩 순서, 웹 폰트, 레이아웃 흔들림, 외부 서비스 관리까지 효과가 큰 순서로 속도 개선 방법을 정리합니다.">
+    <link rel="canonical" href="https://beautifulwind.github.io/pruduct-builder-lectutre/articles/page-speed-basics.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="프로덕트 빌더 노트">
+    <meta property="og:title" content="정적 사이트 로딩 속도 개선 기본">
+    <meta property="og:description" content="Core Web Vitals 측정부터 이미지 최적화, 스크립트 로딩 순서, 웹 폰트, 레이아웃 흔들림, 외부 서비스 관리까지 효과가 큰 순서로 속도 개선 방법을 정리합니다.">
+    <meta property="og:url" content="https://beautifulwind.github.io/pruduct-builder-lectutre/articles/page-speed-basics.html">
+    <meta property="og:locale" content="ko_KR">
+    <meta name="google-adsense-account" content="ca-pub-5980165987555852">
+    <script>
+        // 깜빡임 방지: 렌더링 전에 저장된 테마 적용
+        (function () {
+            var saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (e) {}
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5980165987555852"
+         crossorigin="anonymous"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "정적 사이트 로딩 속도 개선 기본", "description": "Core Web Vitals 측정부터 이미지 최적화, 스크립트 로딩 순서, 웹 폰트, 레이아웃 흔들림, 외부 서비스 관리까지 효과가 큰 순서로 속도 개선 방법을 정리합니다.", "datePublished": "2026-10-29", "dateModified": "2026-10-29", "inLanguage": "ko", "author": {"@type": "Person", "name": "beautifulwind", "url": "https://github.com/beautifulwind"}, "mainEntityOfPage": "https://beautifulwind.github.io/pruduct-builder-lectutre/articles/page-speed-basics.html"}</script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="../index.html">프로덕트 빌더 노트</a>
+            <nav class="site-nav" aria-label="주 메뉴">
+            <a href="../index.html">홈</a>
+            <a href="../about.html">소개</a>
+            <a href="../contact.html">문의</a>
+            </nav>
+            <button class="theme-toggle" id="themeToggle" type="button"></button>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <article>
+            <p class="breadcrumb"><a href="../index.html">홈</a> › 성능</p>
+            <h1>정적 사이트 로딩 속도 개선 기본</h1>
+            <p class="meta">글: beautifulwind · <time datetime="2026-10-29">2026년 10월 29일</time> · 성능</p>
+
+        <p class="lead">페이지가 느리면 내용을 읽기도 전에 방문자가 떠납니다. 정적 사이트는 원래 빠른 편이지만, 이미지 한 장이나 외부 스크립트 하나 때문에 쉽게 느려집니다. 큰 비용 없이 효과가 큰 순서대로 개선 방법을 정리했습니다.</p>
+
+        <nav class="toc" aria-label="목차">
+            <strong>목차</strong>
+            <ol>
+                <li><a href="#measure">먼저 측정하기</a></li>
+                <li><a href="#images">이미지 최적화</a></li>
+                <li><a href="#scripts">스크립트 로딩 순서</a></li>
+                <li><a href="#fonts">웹 폰트</a></li>
+                <li><a href="#layout">레이아웃 흔들림 줄이기</a></li>
+                <li><a href="#third">외부 서비스 관리</a></li>
+            </ol>
+        </nav>
+
+        <h2 id="measure">먼저 측정하기</h2>
+        <p>감으로 고치면 엉뚱한 곳에 시간을 쓰게 됩니다. Google의 <strong>PageSpeed Insights</strong>에 주소를 넣거나 Chrome 개발자 도구의 <strong>Lighthouse</strong>를 실행하면 Core Web Vitals를 중심으로 한 지표를 볼 수 있습니다.</p>
+        <table>
+            <thead><tr><th>지표</th><th>의미</th><th>'좋음' 기준</th></tr></thead>
+            <tbody>
+                <tr><td>LCP (Largest Contentful Paint)</td><td>화면에서 가장 큰 요소가 표시되기까지 걸린 시간</td><td>2.5초 이하</td></tr>
+                <tr><td>INP (Interaction to Next Paint)</td><td>클릭·입력 후 화면이 반응하기까지 걸린 시간</td><td>200밀리초 이하</td></tr>
+                <tr><td>CLS (Cumulative Layout Shift)</td><td>로딩 중 화면 요소가 예기치 않게 밀려난 정도</td><td>0.1 이하</td></tr>
+            </tbody>
+        </table>
+        <p>모바일 결과를 기준으로 보세요. 데스크톱에서는 빠른데 모바일에서만 느린 경우가 훨씬 많습니다.</p>
+
+        <h2 id="images">이미지 최적화</h2>
+        <p>대부분의 페이지에서 용량의 가장 큰 비중은 이미지입니다.</p>
+        <ul>
+            <li><strong>표시 크기에 맞게 줄입니다.</strong> 화면에 700px로 보이는 이미지를 4000px 원본으로 올리면 수 MB를 낭비합니다.</li>
+            <li><strong>WebP나 AVIF 형식</strong>을 쓰면 같은 화질에서 JPEG나 PNG보다 용량이 크게 줄어드는 경우가 많습니다.</li>
+            <li><strong>화면 아래쪽 이미지는 지연 로딩</strong>합니다. <code>&lt;img loading="lazy"&gt;</code> 속성 하나면 됩니다. 단, 첫 화면에 바로 보이는 대표 이미지에는 쓰지 않습니다. LCP가 오히려 늦어집니다.</li>
+            <li><strong>너비와 높이를 지정</strong>합니다. <code>width</code>와 <code>height</code> 속성이 있으면 브라우저가 이미지 자리를 미리 잡아 두어 레이아웃이 흔들리지 않습니다.</li>
+        </ul>
+
+        <h2 id="scripts">스크립트 로딩 순서</h2>
+        <p><code>&lt;head&gt;</code>에 있는 일반 <code>&lt;script src&gt;</code>는 파일을 내려받아 실행할 때까지 화면 그리기를 멈춥니다.</p>
+        <ul>
+            <li>페이지 구조를 다루는 내 스크립트는 <code>defer</code>를 붙이거나 <code>&lt;/body&gt;</code> 직전에 둡니다. <code>defer</code> 스크립트는 HTML을 다 읽은 뒤 순서대로 실행됩니다.</li>
+            <li>광고나 분석처럼 다른 코드와 순서가 상관없는 외부 스크립트는 <code>async</code>로 불러옵니다.</li>
+            <li>반대로 <a href="dark-mode-no-flash.html">다크 모드 초기화</a>처럼 첫 화면 전에 반드시 실행되어야 하는 아주 짧은 코드는 <code>&lt;head&gt;</code>에 인라인으로 두는 것이 맞습니다. 모든 스크립트를 미루는 것이 정답은 아닙니다.</li>
+        </ul>
+
+        <h2 id="fonts">웹 폰트</h2>
+        <p>한글 웹 폰트는 글자 수가 많아 파일이 큽니다. 꼭 필요하지 않다면 운영체제 기본 글꼴(<code>system-ui</code>, <code>Apple SD Gothic Neo</code>, <code>Malgun Gothic</code>)만으로도 충분히 깔끔한 화면을 만들 수 있고, 내려받을 파일이 없으니 가장 빠릅니다. 웹 폰트를 쓴다면 필요한 굵기만 불러오고, <code>font-display: swap</code>으로 폰트를 받는 동안에도 글자가 보이게 합니다.</p>
+
+        <h2 id="layout">레이아웃 흔들림 줄이기</h2>
+        <p>글을 읽으려는 순간 위쪽에 무언가 끼어들어 본문이 아래로 밀리는 경험은 매우 불쾌합니다. CLS를 줄이려면 나중에 채워지는 영역의 공간을 미리 확보해야 합니다.</p>
+        <ul>
+            <li>이미지와 영상에 크기를 지정합니다.</li>
+            <li>광고나 임베드가 들어갈 자리에 <code>min-height</code>를 잡아 둡니다.</li>
+            <li>기존 콘텐츠 <strong>위쪽</strong>에 요소를 동적으로 삽입하지 않습니다. 알림 배너가 필요하면 화면에 겹쳐 띄우는 방식이 낫습니다.</li>
+        </ul>
+
+        <h2 id="third">외부 서비스 관리</h2>
+        <p>댓글, 광고, 분석, 채팅 위젯은 각각 여러 개의 추가 요청을 만듭니다. 하나하나는 편리하지만 쌓이면 페이지를 무겁게 만듭니다.</p>
+        <ul>
+            <li>정말 쓰는 서비스인지 주기적으로 점검하고, 쓰지 않는 코드는 제거합니다.</li>
+            <li>댓글처럼 페이지 맨 아래에 있는 위젯은 사용자가 그 근처까지 스크롤했을 때 불러오는 방식도 고려할 만합니다.</li>
+            <li>광고는 본문보다 많아지지 않게 합니다. 속도 문제뿐 아니라 사용자 경험과 사이트 신뢰도에도 직접 영향을 줍니다.</li>
+        </ul>
+
+        <h2>정리</h2>
+        <p>측정 → 가장 큰 원인 하나 개선 → 다시 측정. 이 순서를 반복하는 것이 가장 효율적입니다. 대부분의 정적 사이트는 이미지 크기 조절과 스크립트 로딩 순서만 바로잡아도 '좋음' 범위에 들어옵니다.</p>
+
+            <aside class="author-box">
+                <strong>글쓴이 beautifulwind</strong><br>
+                이 사이트를 직접 만들고 운영하며 겪은 문제와 해결 방법을 기록합니다. 내용에 오류가 있다면 아래 댓글이나 <a href="../contact.html">문의 페이지</a>로 알려 주세요.
+            </aside>
+
+            <nav class="related" aria-label="관련 글">
+                <strong>함께 읽으면 좋은 글</strong>
+                <ul>
+                    <li><a href="dark-mode-no-flash.html">깜빡임 없는 다크 모드 구현하기</a></li>
+                    <li><a href="meta-tags-seo-basics.html">검색 노출을 위한 기본 메타 태그와 sitemap</a></li>
+                </ul>
+            </nav>
+        </article>
+
+        <section class="comments" aria-label="댓글">
+            <h2>댓글</h2>
+            <div id="disqus_thread"></div>
+            <noscript>댓글을 보려면 JavaScript를 켜 주세요. <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <nav aria-label="사이트 정보">
+            <a href="../about.html">소개</a>
+            <a href="../contact.html">문의</a>
+            <a href="../privacy.html">개인정보처리방침</a>
+            <a href="../terms.html">이용약관</a>
+            </nav>
+            <p>&copy; 2026 프로덕트 빌더 노트. 운영: beautifulwind</p>
+        </div>
+    </footer>
+
+    <script src="../assets/main.js"></script>
+</body>
+</html>
